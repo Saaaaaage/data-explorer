@@ -1,0 +1,5 @@
+https://data.world/bls/bls-employment-wages
+
+https://data.world/bls/median-weekly-earnings-by-sex
+
+https://data.world/jonloyens/irs-income-by-zip-code

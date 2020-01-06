@@ -1,0 +1,4 @@
+/node_modules/
+/datasets/
+/webpack.*
+.DS_Store
