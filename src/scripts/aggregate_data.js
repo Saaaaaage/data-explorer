@@ -44,7 +44,6 @@ export default options => {
         }
     });
 
-    console.log(aggData);
     return aggData.sort((a, b) => {
         return b[metric] - a[metric];
     });

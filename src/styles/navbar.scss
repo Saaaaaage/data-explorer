@@ -1,0 +1,26 @@
+#navbar {
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 25px;
+    margin-bottom: 50px;
+    color: #eeeeee;
+    background-color: #222831;
+}
+
+#navbar-left {
+    font-family: "Arbutus";
+    transition: color .5s ease;
+
+
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: 5px;
+}
+// #navbar-left:hover {
+//     text-shadow: 0 0 12px #00adb5;
+// }
+
+#navbar-center {}
+
+#navbar-right {}

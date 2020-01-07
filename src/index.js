@@ -13,7 +13,7 @@ window.addEventListener("DOMContentLoaded", () => {
         window.DataExplorer = {};
         DataExplorer.rawData = rawData;
 
-        const fields = buildLists(rawData);
+        buildLists(rawData);
 
         let options = getOptions();
 
@@ -32,5 +32,5 @@ window.addEventListener("DOMContentLoaded", () => {
                 }
             }
         }
-    }
+    };
 });

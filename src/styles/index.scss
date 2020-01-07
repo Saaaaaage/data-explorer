@@ -1,3 +1,8 @@
+@import "./_reset.scss";
+
+@import "./navbar.scss";
+@import "./fields.scss";
+@import "./chart.scss";
 
 
 #content {
@@ -13,30 +18,11 @@
 
 #chart {
     height: 100%;
-    width: 850px;
+    min-width: 500px;
+    width: 750px;
 }
 
-#sidebar {
-    height: 100%;
-}
 
-#dimensions {
-    height: 50%;
-}
-
-#metrics {
-    height: 50%;
-}
-
-.active {
-    border-radius: 3px;
-    background-color: rgb(63, 63, 63);
-    color: #FFF;
-}
-
-svg {
-    background-color: gainsboro;
-}
 
 
 

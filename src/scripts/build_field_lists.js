@@ -16,24 +16,28 @@ export default (rawData) => {
     const metUl = document.getElementById("met-ul");
 
     dimensions.forEach(dim => {
-        const dimItem = document.createElement("li");
-        dimItem.innerHTML = dim;
-        dimItem.addEventListener("click", e => {
-            Array.from(dimUl.getElementsByClassName('active')).forEach(li => {
-                li.classList.remove('active');
-            });
-            e.target.classList.add('active');
-            updateChart(getOptions());
+        const dimLi = document.createElement("li");
+        dimLi.classList.add("field");
+        dimLi.innerHTML = dim;
+        dimLi.addEventListener("click", e => {
+            if (!e.target.classList.contains('active')) {
+                Array.from(dimUl.getElementsByClassName('active')).forEach(li => {
+                    li.classList.remove('active');
+                });
+                e.target.classList.add('active');
+                updateChart(getOptions());
+            }
         });
-        dimItem.dataset.fn = 'sum';
-        dimItem.dataset.field = dim;
-        dimUl.appendChild(dimItem);
+        dimLi.dataset.fn = 'sum';
+        dimLi.dataset.field = dim;
+        dimUl.appendChild(dimLi);
     });
     dimUl.firstElementChild.classList.add('active');
 
     metrics.forEach(met => {
         // Create list element
         const metLi = document.createElement("li");
+        metLi.classList.add("field");
 
         // add the metric name to the LI
         const metName = document.createElement("span");
@@ -64,16 +68,19 @@ export default (rawData) => {
 
         // add event listener to the metric name element
         metName.addEventListener("click", e => {
-            // remove active class from parent UL LIs
-            Array.from(metUl.getElementsByClassName('active')).forEach(li => {
-                li.classList.remove('active');
-            });
+            let parentLi = e.currentTarget.closest('li');
+            if (!parentLi.classList.contains('active')) {
+                // remove active class from parent UL LIs
+                Array.from(metUl.getElementsByClassName('active')).forEach(li => {
+                    li.classList.remove('active');
+                });
 
-            // add active class to the parent LI
-            e.currentTarget.closest('li').classList.add('active');
+                // add active class to the parent LI
+                parentLi.classList.add('active');
 
-            // fire D3 chart update
-            updateChart(getOptions());
+                // fire D3 chart update
+                updateChart(getOptions());
+            }
         });
 
         // add dropdown event listener to the f(n) dropdown

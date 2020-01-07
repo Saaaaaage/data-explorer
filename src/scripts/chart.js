@@ -6,7 +6,7 @@ export default (options) => {
     // Width and height of SVG
     const width = 500;
     const height = 500;
-    const margin = { top: 20, right: 20, bottom: 100, left: 100 };
+    const margin = { top: 20, right: 20, bottom: 75, left: 50 };
     const location = '#chart';
 
     // Get length of dataset
@@ -27,7 +27,7 @@ export default (options) => {
 
     const xAxis = g => g
         .attr("transform", `translate(0,${height - margin.bottom})`)
-        .call(d3.axisBottom(x).tickFormat(i => data[i][dimension]).tickSizeOuter(0))
+        .call(d3.axisBottom(x).tickFormat(i => data[i][dimension]).tickSizeOuter(0));
 
     const yAxis = g => g
         .attr("transform", `translate(${margin.left},0)`)
@@ -43,6 +43,16 @@ export default (options) => {
     // Add the new SVG
     d3.select(location).append(() => svg.node());
 
+    let tooltip;
+    if (document.getElementById('tooltip')) {
+        tooltip = d3.select('#tooltip');
+    } else {
+        tooltip = d3.select("body").append('div')
+            .attr('id', 'tooltip')
+            .attr('class', 'tooltip')
+            .style('opacity', 0);
+    }
+
     svg.append("g")
             .attr("fill", "steelblue")
         .selectAll("rect")
@@ -51,7 +61,20 @@ export default (options) => {
             .attr("x", (d, i) => x(i))
             .attr("y", d => y(0))
             .attr("height", d => y(0) - y(0))
-            .attr("width", x.bandwidth());
+            .attr("width", x.bandwidth())
+        .on('mouseover', (d) => {
+            tooltip.transition().duration(200).style('opacity', 0.9);
+            tooltip.html(`${dimension}: <span>${d[dimension]}</span><br/><br/>
+                ${metric} (${fn}): <span>${d[metric]}</span>`)
+                .style('left', `${d3.event.layerX}px`)
+                .style('top', `${(d3.event.layerY - 28)}px`);
+            
+        })
+        .on('mousemove', d => {
+            tooltip.style('left', `${d3.event.layerX}px`)
+                .style('top', `${(d3.event.layerY - 28)}px`);
+        })
+        .on('mouseout', () => tooltip.transition().duration(500).style('opacity', 0));
 
     svg.append("g")
         .call(xAxis)
@@ -70,8 +93,32 @@ export default (options) => {
         .duration(800)
         .attr("y", d => y(d[metric]))
         .attr("height", d => y(0) - y(d[metric]))
-        .delay(function (d, i) { console.log(i); return (i * 100); });
+        .delay(function (d, i) { return (i * 100); });
     
+
+    // svg.append("text")
+    //     .attr("transform", "rotate(-90)")
+    //     .attr("y", 0 - margin.left)
+    //     .attr("x", 0 - (height / 2))
+    //     .attr("dy", "1em")
+    //     .style("text-anchor", "middle")
+    //     .text("Value");   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // Use a scale for the height of the visualization
     // const yScale = d3.scaleLinear()
     //     .domain([0, maxValue])

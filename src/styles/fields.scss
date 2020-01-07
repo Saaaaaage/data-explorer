@@ -1,0 +1,45 @@
+#sidebar {
+    padding-left: 10px;
+    height: 100%;
+}
+
+#dimensions {
+    height: 50%;
+}
+
+#metrics {
+    height: 50%;
+}
+
+
+.field {
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 5px 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 3px;
+
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.field:hover:not(.active) {
+    background-color: gainsboro;
+}
+
+.field i {
+    margin-left: 10px;
+}
+
+.active {
+    border-radius: 3px;
+    background-color: rgb(63, 63, 63);
+    color: #FFF;
+}

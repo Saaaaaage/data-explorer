@@ -5,29 +5,29 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="icon" type="image/ico" href="./assets/favicon-16x16.png">
     <link rel="stylesheet" href="./dist/main.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Arbutus">
     <title>Data Explorer</title>
 </head>
 
 <body>
     <script src="./dist/main.js"></script>
     <div id="root">
-        <div id="header">
-            This is the header
+        <div id="navbar">
+            <div id="navbar-left">Data Explorer</div>
+            <div id="navbar-center">Dataset: NYC</div>
+            <div id="navbar-right"><i class="fas fa-info-circle"></i>About</div>
         </div>
         <div id='content'>
             <div id="chart">
-                chart
+
             </div>
             <div id="sidebar">
-                <div id="dimensions">
-                    Dimensions
-                    <ul id="dim-ul"></ul>
+                <div id="dimensions">Dimensions<ul id="dim-ul"></ul>
                 </div>
-                <div id="metrics">
-                    Metrics
-                    <ul id="met-ul"></ul>
+                <div id="metrics">Metrics<ul id="met-ul"></ul>
                 </div>
             </div>
         </div>
