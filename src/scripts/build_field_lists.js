@@ -1,3 +1,5 @@
+import getOptions from './get_options';
+import updateChart from './update_chart';
 
 export default (rawData) => {
     let dimensions = [];
@@ -21,21 +23,78 @@ export default (rawData) => {
                 li.classList.remove('active');
             });
             e.target.classList.add('active');
+            updateChart(getOptions());
         });
+        dimItem.dataset.fn = 'sum';
+        dimItem.dataset.field = dim;
         dimUl.appendChild(dimItem);
     });
+    dimUl.firstElementChild.classList.add('active');
 
     metrics.forEach(met => {
-        const metItem = document.createElement("li");
-        metItem.innerHTML = met;
-        metItem.addEventListener("click", e => {
+        // Create list element
+        const metLi = document.createElement("li");
+
+        // add the metric name to the LI
+        const metName = document.createElement("span");
+        metName.innerHTML = met;
+        metLi.appendChild(metName);
+
+        // add the function dropdown to the LI
+        const metFn = document.createElement('i');
+        metFn.classList = 'fas fa-angle-down';
+        metFn.innerHTML = `<div class="fn-dropdown">
+                                <div class="fn-item" data-fn="sum">Sum</div>
+                                <div class="fn-item" data-fn="average">Average</div>
+                                <div class="fn-item" data-fn="max">Max</div>
+                                <div class="fn-item" data-fn="min">Min</div>
+                            </div>`;
+        metLi.appendChild(metFn);
+
+        metFn.querySelectorAll(".fn-item").forEach(fn => {
+            fn.addEventListener("click", e => {
+
+                e.currentTarget.closest('li').dataset.fn = e.currentTarget.dataset.fn;
+
+                // fire D3 chart update
+                updateChart(getOptions());
+            });
+        });
+
+
+        // add event listener to the metric name element
+        metName.addEventListener("click", e => {
+            // remove active class from parent UL LIs
             Array.from(metUl.getElementsByClassName('active')).forEach(li => {
                 li.classList.remove('active');
             });
-            e.target.classList.add('active');
+
+            // add active class to the parent LI
+            e.currentTarget.closest('li').classList.add('active');
+
+            // fire D3 chart update
+            updateChart(getOptions());
         });
-        metUl.appendChild(metItem);
+
+        // add dropdown event listener to the f(n) dropdown
+        metFn.addEventListener("click", e => {
+            e.stopPropagation();
+            e.currentTarget.firstElementChild.classList.toggle("show");
+        });
+        metFn.setAttribute('tabindex', "0");
+        metFn.addEventListener("blur", e => {
+            e.stopPropagation();
+            e.currentTarget.querySelector(".fn-dropdown").classList.remove('show');
+        });
+
+        // add met data to the LI
+        metLi.dataset.fn = 'sum';
+        metLi.dataset.field = met;
+
+        // add the LI to the UL
+        metUl.appendChild(metLi);
     });
+    metUl.firstElementChild.classList.add('active');
 
     return {
         metrics: metrics,

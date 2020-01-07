@@ -11,8 +11,8 @@ export default options => {
         collectedValues.push(row[metric]);
         staging[dimValue] = collectedValues;
     });
-    console.log(staging);
-    const aggData = [];
+
+    let aggData = [];
     Object.keys(staging).forEach((key, i) => {
         switch (fn) {
             case "sum":
@@ -43,6 +43,9 @@ export default options => {
                 break;
         }
     });
+
     console.log(aggData);
-    return aggData;
+    return aggData.sort((a, b) => {
+        return b[metric] - a[metric];
+    });
 };
