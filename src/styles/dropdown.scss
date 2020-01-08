@@ -1,0 +1,33 @@
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.fn-dropdown {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 5px;
+
+    top: 0;
+    right: 0;
+}
+
+/* Links inside the dropdown */
+.fn-dropdown div {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  font-weight: 400;
+}
+
+/* Change color of dropdown links on hover */
+.fn-dropdown div:hover {background-color: #ddd}
+
+/* Show the dropdown menu (use JS to add this class to the .fn-dropdown container when the user clicks on the dropdown button) */
+.show {display:block;}

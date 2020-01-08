@@ -1,4 +1,4 @@
-import drawChart from './chart';
+import drawChart from './drawChart';
 import aggregateData from './aggregate_data';
 
 

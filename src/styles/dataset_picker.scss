@@ -1,0 +1,42 @@
+#dataset-switcher {
+  width: 100%;
+  color: #FFF;
+  font-size: 16px;
+  font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+}
+
+#dataset-dropdown {
+  background-color: transparent;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 5px 10px;
+  border: 2px solid transparent;
+  max-width: 100%;
+  cursor:pointer;
+  transition: color .3s ease;
+  display:flex;
+  justify-content: center;
+  text-align: center;
+  transition: 0.3;
+  border-radius: 0px;
+}
+
+
+#dataset-dropdown:hover {
+//   color: rgb(251, 243, 122);
+//   text-shadow: 0 0 12px rgb(255, 117, 5);
+  border-bottom: 2px solid white;
+}
+
+#dataset-dropdown:focus {
+  outline:0;
+}
+
+select {
+  padding: 5px;
+}

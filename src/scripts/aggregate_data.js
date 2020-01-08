@@ -43,7 +43,7 @@ export default options => {
                 break;
         }
     });
-
+    
     return aggData.sort((a, b) => {
         return b[metric] - a[metric];
     });

@@ -8,6 +8,7 @@ export default (options) => {
     const height = 500;
     const margin = { top: 20, right: 20, bottom: 75, left: 50 };
     const location = '#chart';
+    const records = data.length;
 
     // Get length of dataset
     // const arrayLength = data.length; // length of dataset
@@ -76,24 +77,32 @@ export default (options) => {
         })
         .on('mouseout', () => tooltip.transition().duration(500).style('opacity', 0));
 
+    let crowdFactor = Math.floor(records/20) || 1;
+
     svg.append("g")
         .call(xAxis)
         .selectAll("text")
         .style("text-anchor", "end")
+        .attr('class', 'tick-label')
         .attr("dx", "-.8em")
         .attr("dy", ".15em")
-        .attr("transform", "rotate(-45)");
+        .attr("transform", "rotate(-45)")
+        .attr("opacity", (d, i) => {
+            return i % crowdFactor === 0 ? "1" : "0";
+        });
 
     svg.append("g")
         .call(yAxis);
 
     // Transition from 0 height to data height
+    const totalDuration = 1000;
+    let barDuration = totalDuration / data.length;
     svg.selectAll("rect")
         .transition()
         .duration(800)
         .attr("y", d => y(d[metric]))
         .attr("height", d => y(0) - y(d[metric]))
-        .delay(function (d, i) { return (i * 100); });
+        .delay(function (d, i) { return (i * barDuration); });
     
 
     // svg.append("text")

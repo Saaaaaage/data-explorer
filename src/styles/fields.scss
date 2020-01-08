@@ -35,11 +35,29 @@
 }
 
 .field i {
-    margin-left: 10px;
+    margin-left: 4px;
+    position: relative;
 }
 
 .active {
     border-radius: 3px;
     background-color: rgb(63, 63, 63);
     color: #FFF;
+}
+
+
+.current-fn-group {
+    display:flex;
+    align-items: center;
+    position: relative;
+}
+
+.met-current-fn {
+    margin-left: 10px;
+    background-color: brown;
+    color: #FFF;
+    border-radius: 5px;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 4px 3px 4px;
 }

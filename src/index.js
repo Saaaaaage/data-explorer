@@ -1,28 +1,34 @@
 import "./styles/index.scss";
-import updateChart from './scripts/update_chart';
-import buildLists from './scripts/build_field_lists';
-import getOptions from './scripts/get_options';
-import * as d3 from "d3";
-
-
+import loadDataSet from './scripts/loadDataSet';
 
 window.addEventListener("DOMContentLoaded", () => {
-    const file = "../data/income.csv";
+    require('./scripts/modal');
 
-    d3.csv(file, d => d3.autoType(d)).then(rawData => {
-        window.DataExplorer = {};
-        DataExplorer.rawData = rawData;
+    const dataSets = {
+        "NYC's Best Breweries": "../data/NYC Beers.csv",
+        "Some Data I Made Up": "../data/income.csv"
+    };
 
-        buildLists(rawData);
+    // Load the first dataset
+    const setNames = Object.keys(dataSets);
+    const file = dataSets[setNames[0]];
+    loadDataSet(file);
 
-        let options = getOptions();
-
-        updateChart(options);
+    const picker = document.getElementById('dataset-dropdown');
+    setNames.forEach(set => {
+        let option = document.createElement('option');
+        option.setAttribute('value', dataSets[set]);
+        option.innerHTML = set;
+        picker.appendChild(option);
     });
-
-    // Close the dropdown menu if the user clicks outside of it
-    window.onclick = function (event) {
-        if (!event.target.matches('.dropbtn')) {
+    picker.addEventListener('change', e => {
+        e.stopPropagation();
+        loadDataSet(e.target.value);
+    });
+    
+    // Close the modal or dropdown menu if the user clicks outside of it
+    window.onclick = e => {
+        if (!e.target.matches('.dropbtn')) {
             var dropdowns = document.getElementsByClassName("fn-dropdown");
             var i;
             for (i = 0; i < dropdowns.length; i++) {
@@ -31,6 +37,11 @@ window.addEventListener("DOMContentLoaded", () => {
                     openDropdown.classList.remove('show');
                 }
             }
+        }
+
+        var modal = document.getElementById("aboutModal");
+        if (e.target == modal) {
+            modal.style.display = "none";
         }
     };
 });

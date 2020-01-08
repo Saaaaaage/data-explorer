@@ -15,6 +15,9 @@ export default (rawData) => {
     const dimUl = document.getElementById("dim-ul");
     const metUl = document.getElementById("met-ul");
 
+    dimUl.innerHTML = "";
+    metUl.innerHTML = "";
+
     dimensions.forEach(dim => {
         const dimLi = document.createElement("li");
         dimLi.classList.add("field");
@@ -39,44 +42,69 @@ export default (rawData) => {
         const metLi = document.createElement("li");
         metLi.classList.add("field");
 
-        // add the metric name to the LI
+        // Add the metric name to the LI
         const metName = document.createElement("span");
         metName.innerHTML = met;
         metLi.appendChild(metName);
 
-        // add the function dropdown to the LI
-        const metFn = document.createElement('i');
-        metFn.classList = 'fas fa-angle-down';
+        // Add the function dropdown to the LI
+        const metFn = document.createElement('div');
+        metFn.classList.add('current-fn-group')
+        metLi.appendChild(metFn);
+        
+        // Actual dropdown item list
         metFn.innerHTML = `<div class="fn-dropdown">
                                 <div class="fn-item" data-fn="sum">Sum</div>
                                 <div class="fn-item" data-fn="average">Average</div>
                                 <div class="fn-item" data-fn="max">Max</div>
                                 <div class="fn-item" data-fn="min">Min</div>
                             </div>`;
-        metLi.appendChild(metFn);
+        
+        // Add current function to the dropdown button
+        const metCurrentFn = document.createElement('span');
+        metCurrentFn.classList.add('met-current-fn');
+        metCurrentFn.innerHTML = 'sum';
+        metFn.appendChild(metCurrentFn);
+
+        // Add a dropdown arrow to the dropdown button
+        const metDropDown = document.createElement('i');
+        metDropDown.classList = 'fas fa-angle-down';
+        metFn.appendChild(metDropDown);
 
         metFn.querySelectorAll(".fn-item").forEach(fn => {
             fn.addEventListener("click", e => {
+                let parentLi = e.currentTarget.closest('li');
+                let newFn = e.currentTarget.dataset.fn;
+                let oldFn = parentLi.dataset.fn;
 
-                e.currentTarget.closest('li').dataset.fn = e.currentTarget.dataset.fn;
+                parentLi.dataset.fn = newFn;
+                parentLi.querySelector('.met-current-fn').innerHTML = newFn === 'average' ? (
+                    'avg'
+                ) : (
+                    newFn
+                );
+
 
                 // fire D3 chart update
-                updateChart(getOptions());
+                if (newFn != oldFn && parentLi.classList.contains('active')) {
+                    updateChart(getOptions());
+                }
             });
         });
 
 
         // add event listener to the metric name element
-        metName.addEventListener("click", e => {
-            let parentLi = e.currentTarget.closest('li');
-            if (!parentLi.classList.contains('active')) {
+        metLi.addEventListener("click", e => {
+            e.stopPropagation();
+            // let parentLi = e.currentTarget.closest('li');
+            if (!e.currentTarget.classList.contains('active')) {
                 // remove active class from parent UL LIs
                 Array.from(metUl.getElementsByClassName('active')).forEach(li => {
                     li.classList.remove('active');
                 });
 
                 // add active class to the parent LI
-                parentLi.classList.add('active');
+                e.currentTarget.classList.add('active');
 
                 // fire D3 chart update
                 updateChart(getOptions());
