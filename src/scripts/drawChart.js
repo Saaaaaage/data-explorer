@@ -3,19 +3,23 @@ import * as d3 from "d3";
 export default (options) => {
     const { data, dimension, metric, fn } = options;
 
+    // Figure out bottom margin
+    const records = data.length;
+    let crowdFactor = Math.floor(records / 20) || 1;
+    let longest = 0;
+    data.forEach((d, i) => {
+        if (i % crowdFactor === 0) {
+            longest = d[dimension].length > longest ? d[dimension].length : longest;
+        }
+    });
+
+
     // Width and height of SVG
     const width = 500;
     const height = 500;
-    const margin = { top: 20, right: 20, bottom: 75, left: 50 };
+    const margin = { top: 20, right: 20, bottom: 75+longest*2, left: 75+longest };
     const location = '#chart';
-    const records = data.length;
 
-    // Get length of dataset
-    // const arrayLength = data.length; // length of dataset
-    // const maxValue = d3.max(data, function (d) { return +d[metric]; }); // get maximum
-    // const x_axisLength = width - (margin.left + margin.right); // length of x-axis in our layout
-    // const y_axisLength = height - (margin.top + margin.bottom); // length of y-axis in our layout
-    // const barWidth = (x_axisLength / arrayLength) - 1;
 
     const x = d3.scaleBand()
         .domain(d3.range(data.length))
@@ -77,8 +81,6 @@ export default (options) => {
         })
         .on('mouseout', () => tooltip.transition().duration(500).style('opacity', 0));
 
-    let crowdFactor = Math.floor(records/20) || 1;
-
     svg.append("g")
         .call(xAxis)
         .selectAll("text")
@@ -103,125 +105,5 @@ export default (options) => {
         .attr("y", d => y(d[metric]))
         .attr("height", d => y(0) - y(d[metric]))
         .delay(function (d, i) { return (i * barDuration); });
-    
 
-    // svg.append("text")
-    //     .attr("transform", "rotate(-90)")
-    //     .attr("y", 0 - margin.left)
-    //     .attr("x", 0 - (height / 2))
-    //     .attr("dy", "1em")
-    //     .style("text-anchor", "middle")
-    //     .text("Value");   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // Use a scale for the height of the visualization
-    // const yScale = d3.scaleLinear()
-    //     .domain([0, maxValue])
-    //     .range([0, y_axisLength]);
-
-    // // Remove any existing SVG
-    // d3.select("svg").remove();
-
-    // // Create fresh SVG element
-    // const svg = d3.select(location)
-    //     .append("svg")
-    //     .attr("width", width)
-    //     .attr("height", height)
-    //     .attr("class", "chart");
-
-    // // define the y axis
-    // var yAxis = d3.axisLeft(yScale);
-
-    // svg.append("g")
-    //     .attr("class", "axis")
-    //     .attr("transform", "translate(" + margin.left + ",0)")
-    //     .call(yAxis);
-
-    // // Select and generate rectangle elements
-    // svg.selectAll("rect")
-    //     .data(data)
-    //     .enter()
-    //     .append("rect")
-    //     .attr("x", function (d, i) {
-    //         return i * (x_axisLength / arrayLength) + margin.left; // Set x coordinate of rectangle to index of data value (i) *25
-    //     })
-    //     .attr("y", function (d) {
-    //         return height - yScale(0) - margin.bottom; // Set y coordinate of rect using the y scale
-    //     })
-    //     .attr("width", barWidth)
-    //     .attr("height", function (d) {
-    //         return yScale(0); // Set height of using the scale
-    //     })
-    //     .attr("fill", "steelblue");
-
-    // // Transition from 0 height to data height
-    // svg.selectAll("rect")
-    //     .transition()
-    //     .duration(800)
-    //     .attr("y", function (d) {
-    //         return height - yScale(d[metric]) - margin.bottom; // Set y coordinate of rect using the y scale
-    //     })
-    //     .attr("height", function (d) {
-    //         return yScale(d[metric]); // Set height of using the scale
-    //     })
-    //     .delay(function (d, i) { console.log(i); return (i * 100); });
-
-    // // Generate bar labels
-    // svg.selectAll("text")
-    //     .data(data)
-    //     .enter()
-    //     .append("text")
-    //     .attr("class", "x-label")
-    //     .attr("text-anchor", "end")
-    //     .attr("x", (d, i) => {
-    //         return i * (x_axisLength / arrayLength) + margin.left + barWidth/2; // Set x coordinate of rectangle to index of data value (i) *25
-    //     })
-    //     .attr("y", d => {
-    //         return height - margin.bottom; // Set y coordinate of rect using the y scale
-    //     })
-    //     .attr("dy", ".75em")
-    //     .text(function (d) { return d[dimension]; });
-    
-
-
-    // // Create y-axis
-    // svg.append("line")
-    //     .attr("x1", 30)
-    //     .attr("y1", 75)
-    //     .attr("x2", 30)
-    //     .attr("y2", 175)
-    //     .attr("stroke-width", 2)
-    //     .attr("stroke", "black");
-
-    // // Create x-axis
-    // svg.append("line")
-    //     .attr("x1", 30)
-    //     .attr("y1", 175)
-    //     .attr("x2", 130)
-    //     .attr("y2", 175)
-    //     .attr("stroke-width", 2)
-    //     .attr("stroke", "black");
-
-    // // y-axis label
-    // svg.append("text")
-    //     .attr("class", "y-label")
-    //     .attr("text-anchor", "end")
-    //     .text(`${metric}`)
-    //     .attr("transform", "translate(20, 20) rotate(-90)")
-    //     .attr("font-size", "14")
-    //     .attr("font-family", "'Open Sans', sans-serif");
 };
