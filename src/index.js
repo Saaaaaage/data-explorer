@@ -3,10 +3,10 @@ import loadDataSet from './scripts/loadDataSet';
 
 window.addEventListener("DOMContentLoaded", () => {
     require('./scripts/modal');
-
+    
     const dataSets = {
-        "NYC's Best Breweries": "../data/NYC Beers.csv",
-        "Some Data I Made Up": "../data/income.csv"
+        "NYC's Best Breweries": "./data/NYC Beers.csv",
+        "Some Data I Made Up": "./data/income.csv"
     };
 
     // Load the first dataset
