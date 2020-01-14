@@ -24,6 +24,20 @@
 #aboutBtn {
     cursor: pointer;
     padding: 5px 0 5px 5px;
+    font-size: 18px;
+}
+
+.navlinks {
+    padding: 0 5px;
+    font-size: 18px;
+    color: #FFF;
+    text-decoration: none;
+    transition: all 0.5s;
+    display: inline-block;
+}
+
+.navlinks:hover {
+    transform: translate(0, -2px);
 }
 
 #navbar-center {}
