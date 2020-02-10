@@ -8,10 +8,13 @@ export default file => {
         window.DataExplorer = {};
         DataExplorer.rawData = rawData;
 
+        // Construct Dimension and Metric lists
         buildLists(rawData);
 
+        // Get currently selected options from Dim/Met lists
         let options = getOptions();
 
+        // Aggregate data per options object, and build the D3.js chart
         updateChart(options);
     });
 };
