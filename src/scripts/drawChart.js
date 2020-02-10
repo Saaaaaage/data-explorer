@@ -48,6 +48,7 @@ export default (options) => {
     // Add the new SVG
     d3.select(location).append(() => svg.node());
 
+    // create tooltip
     let tooltip;
     if (document.getElementById('tooltip')) {
         tooltip = d3.select('#tooltip');
@@ -58,6 +59,7 @@ export default (options) => {
             .style('opacity', 0);
     }
 
+    // draw bars and add tooltip
     svg.append("g")
             .attr("fill", "steelblue")
         .selectAll("rect")
@@ -106,4 +108,12 @@ export default (options) => {
         .attr("height", d => y(0) - y(d[metric]))
         .delay(function (d, i) { return (i * barDuration); });
 
+    // Y axis label
+    svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", margin.left - 70)
+        .attr("x",0 - (height / 3))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text(`${metric} (${fn})`);      
 };
