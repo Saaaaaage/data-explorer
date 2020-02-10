@@ -53,6 +53,32 @@ rawData.columns.forEach(col => {
 });
 ```
 
+From there, the lists are added to the page using pure JS.  Here is the snippet that constructs the simpler list of dimensions:
+
+```
+const dimUl = document.getElementById("dim-ul");
+dimUl.innerHTML = "";
+
+dimensions.forEach(dim => {
+    const dimLi = document.createElement("li");
+    dimLi.classList.add("field");
+    dimLi.innerHTML = dim;
+    dimLi.addEventListener("click", e => {
+        if (!e.target.classList.contains('active')) {
+            Array.from(dimUl.getElementsByClassName('active')).forEach(li => {
+                li.classList.remove('active');
+            });
+            e.target.classList.add('active');
+            updateChart(getOptions());
+        }
+    });
+    dimLi.dataset.fn = 'sum';
+    dimLi.dataset.field = dim;
+    dimUl.appendChild(dimLi);
+});
+dimUl.firstElementChild.classList.add('active');
+```
+
 
 ### Aggregating the Data
 
@@ -75,9 +101,23 @@ This function sits between the user's actions and the draw logic to make sure th
 
 Data will enter the aggregation function in its raw form:
 ```
-[]
+[{
+    Brewery: "Alewife Taproom",
+    Borough: "Queens",
+    Neighborhood: "LIC",
+    Beer Name: "Frau Holle",
+    Style: "German Doppelbock",
+    Alcohol by Volume: 7.1,
+    Ratings Count: 1,
+    Rating: 4.47
+}],
+[{...}],
+[{...}],
+[{...}],
+...
 ```
 
+The data will then be organized according to the selected dimension per this snippet.
 
 ```
 data.forEach(row => {
@@ -87,6 +127,18 @@ data.forEach(row => {
     staging[dimValue] = collectedValues;
 });
 ```
+
+EG if we have chosen to aggregate by `Borough`, we'd end up with this staging object:
+
+```
+{
+    Queens: [7.1, 5.76, 8.3, ...]
+    Brooklyn: [5.6, 8.6, 4.6, ...]
+    Bronx: [6.5, 7.5, 4.8, ...]
+}
+```
+
+Then the array of values is simply reduced down to a single value according to the selected aggregation function:
 ```
 let aggData = [];
 Object.keys(staging).forEach((key, i) => {
@@ -119,6 +171,15 @@ Object.keys(staging).forEach((key, i) => {
             break;
     }
 });
+```
+
+Finally, we are left with a simple list of distinct dimensional values, and their associated metrics:
+```
+[
+    {Borough: "Queens", Alcohol by Volume: 6.78},
+    {Borough: "Brooklyn", Alcohol by Volume: 6.64},
+    {Borough: "Bronx", Alcohol by Volume: 6.37}
+]
 ```
 
 ### Drawing the Chart
