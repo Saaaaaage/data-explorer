@@ -38,7 +38,7 @@ The field list allows the user to select the dimension to display, the metric to
 
 ![fields](docs/images/fields.png)
 
-The fields are determined by the first row of the CSV file, which are separated into dimensions (ways to slice up data) and metrics (values that can be aggregated).
+The first row of the CSV file determines the fields to display, which are separated into dimensions (ways to slice up data) and metrics (values that can be aggregated).
 
 ![data](docs/images/raw_csv.png)
 
@@ -72,6 +72,54 @@ export default options => {
 ```
 
 This function sits between the user's actions and the draw logic to make sure the raw data from the dataset is aggregated before drawing takes place.  The aggregation takes place in `aggregate_data.js` to return an aggregated set according to the selected aggregation function.
+
+Data will enter the aggregation function in its raw form:
+```
+[]
+```
+
+
+```
+data.forEach(row => {
+    let dimValue = row[dimension];
+    let collectedValues = staging[dimValue] || [];
+    collectedValues.push(row[metric]);
+    staging[dimValue] = collectedValues;
+});
+```
+```
+let aggData = [];
+Object.keys(staging).forEach((key, i) => {
+    switch (fn) {
+        case "sum":
+            aggData.push({
+                [dimension]: key,
+                [metric]: staging[key].reduce((a, b) => a + b, 0)
+            });
+            break;
+        case "average":
+            aggData.push({
+                [dimension]: key,
+                [metric]: (staging[key].reduce((a, b) => a + b, 0))/staging[key].length
+            });
+            break;
+        case "min":
+            aggData.push({
+                [dimension]: key,
+                [metric]: Math.min(...staging[key])
+            });
+            break;
+        case "max":
+            aggData.push({
+                [dimension]: key,
+                [metric]: Math.max(...staging[key])
+            });
+            break;
+        default:
+            break;
+    }
+});
+```
 
 ### Drawing the Chart
 
